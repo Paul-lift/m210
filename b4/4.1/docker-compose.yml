@@ -1,0 +1,12 @@
+services:
+  web:
+    build: .
+    ports:
+      - "8084:80"
+
+  backend:            # ist ein container der später lauft startet aber ein image
+    build: 
+      context: ../../b3/3.3
+      dockerfile: Dockerfile.test
+    ports:
+      - "8085:8085"
