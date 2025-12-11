@@ -1,5 +1,9 @@
-FROM nginx:latest
+FROM python:latest
 
-COPY index.html /usr/share/nginx/html
+WORKDIR /app
+COPY ka.py /app/
+
+RUN pip install flask
 
 EXPOSE 8085
+CMD ["python", "ka.py"]
