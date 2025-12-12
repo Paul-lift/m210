@@ -22,7 +22,7 @@ spec:
         ports:
         - containerPort: 3001
           protocol: TCP
-        image: ghcr.io/paul-lift/nextjs-backend-app:v1
+        image: ghcr.io/paul-lift/nextjs-backend-app:latest
         imagePullPolicy: Always
         env:
         - name: MONGODB_URI
@@ -71,7 +71,7 @@ spec:
         ports:
         - containerPort: 3000
           protocol: TCP
-        image: ghcr.io/paul-lift/nextjs-openshift-app:v1
+        image: ghcr.io/paul-lift/nextjs-openshift-app:latest
         imagePullPolicy: Always
         env:
         - name: NEXT_PUBLIC_API_URL
