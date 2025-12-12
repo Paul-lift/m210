@@ -54,11 +54,9 @@ jobs:
       # DEPLOYMENT ZU OPENSHIFT
       # ============================================
       - name: Install OpenShift CLI (oc)
-        run: |
-          curl -L https://github.com/openshift/okd/releases/download/4.14.0-okd/openshift-client-linux-4.14.0-okd.tar.gz -o oc.tar.gz
-          tar xzf oc.tar.gz
-          sudo mv oc /usr/local/bin/
-          oc version
+        uses: redhat-actions/oc-installer@v1
+        with:
+          oc_version: latest
 
       - name: Login to OpenShift
         uses: redhat-actions/oc-login@v1
