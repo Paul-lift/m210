@@ -50,4 +50,34 @@ jobs:
             ghcr.io/paul-lift/m210/nextjs-openshift-app:latest
             ghcr.io/paul-lift/m210/nextjs-openshift-app:${{ github.sha }}
 
+      # ============================================
+      # DEPLOYMENT ZU OPENSHIFT
+      # ============================================
+      - name: Login to OpenShift
+        uses: redhat-actions/oc-login@v1
+        with:
+          openshift_server_url: ${{ secrets.OPENSHIFT_SERVER }}
+          openshift_token: ${{ secrets.OPENSHIFT_TOKEN }}
+          insecure_skip_tls_verify: true
+
+      - name: Update Images in deployment.yaml
+        run: |
+          sed -i 's|ghcr.io/paul-lift/m210/nextjs-backend-app:latest|ghcr.io/paul-lift/m210/nextjs-backend-app:${{ github.sha }}|g' ./b6/testapp/deployment.yaml
+          sed -i 's|ghcr.io/paul-lift/m210/nextjs-openshift-app:latest|ghcr.io/paul-lift/m210/nextjs-openshift-app:${{ github.sha }}|g' ./b6/testapp/deployment.yaml
+
+      - name: Deploy to OpenShift
+        run: |
+          oc apply -f ./b6/testapp/deployment.yaml
+
+      - name: Wait for Deployment
+        run: |
+          oc rollout status deployment/nextjs-backend-app -n default --timeout=5m
+          oc rollout status deployment/nextjs-openshift-app -n default --timeout=5m
+
+      - name: Print Route Info
+        run: |
+          echo "✅ Deployment erfolgreich!"
+          echo "Verfügbare Routes:"
+          oc get routes
+
  
