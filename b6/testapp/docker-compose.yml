@@ -1,0 +1,47 @@
+version: '3.8'
+
+services:
+  mongo:
+    image: mongo:7
+    container_name: nextjs-mongo
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongo_data:/data/db
+    environment:
+      MONGO_INITDB_DATABASE: nextjs-app
+    networks:
+      - nextjs-network
+
+  backend:
+    build: ./backend
+    container_name: nextjs-backend
+    ports:
+      - "3001:3001"
+    environment:
+      MONGODB_URI: mongodb://mongo:27017/nextjs-app
+      PORT: 3001
+      NODE_ENV: production
+    depends_on:
+      - mongo
+    networks:
+      - nextjs-network
+
+  frontend:
+    build: .
+    container_name: nextjs-frontend
+    ports:
+      - "3000:3000"
+    environment:
+      NEXT_PUBLIC_API_URL: http://localhost:3001
+    depends_on:
+      - backend
+    networks:
+      - nextjs-network
+
+volumes:
+  mongo_data:
+
+networks:
+  nextjs-network:
+    driver: bridge

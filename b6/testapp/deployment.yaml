@@ -1,0 +1,113 @@
+# BACKEND DEPLOYMENT
+kind: Deployment
+apiVersion: apps/v1
+metadata:
+  name: nextjs-backend-app
+  labels:
+    app: nextjs-backend-app
+    app.kubernetes.io/part-of: nextjs-openshift-app
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: nextjs-backend-app
+  template:
+    metadata:
+      labels:
+        app: nextjs-backend-app
+    spec:
+      containers:
+      - name: nextjs-backend-app
+        resources: {}
+        ports:
+        - containerPort: 3001
+          protocol: TCP
+        image: ghcr.io/paul-lift/nextjs-backend-app:v1
+        imagePullPolicy: Always
+        env:
+        - name: MONGODB_URI
+          value: "mongodb://mongodb:27017/todos"
+        - name: PORT
+          value: "3001"
+---
+# BACKEND SERVICE - LINK: Wird vom Frontend über diese Service referenziert
+kind: Service
+apiVersion: v1
+metadata:
+  name: nextjs-backend-app
+  labels:
+    app: nextjs-backend-app
+    app.kubernetes.io/part-of: nextjs-openshift-app
+spec:
+  ports:
+    - name: http
+      protocol: TCP
+      port: 3001
+      targetPort: 3001
+  selector:
+    app: nextjs-backend-app
+---
+# FRONTEND DEPLOYMENT
+kind: Deployment
+apiVersion: apps/v1
+metadata:
+  name: nextjs-openshift-app
+  labels:
+    app: nextjs-openshift-app
+    app.kubernetes.io/part-of: nextjs-openshift-app
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: nextjs-openshift-app
+  template:
+    metadata:
+      labels:
+        app: nextjs-openshift-app
+    spec:
+      containers:
+      - name: nextjs-openshift-app
+        resources: {}
+        ports:
+        - containerPort: 3000
+          protocol: TCP
+        image: ghcr.io/paul-lift/nextjs-openshift-app:v1
+        imagePullPolicy: Always
+        env:
+        - name: NEXT_PUBLIC_API_URL
+          value: "http://nextjs-backend-app:3001/api"
+---
+# FRONTEND SERVICE
+kind: Service
+apiVersion: v1
+metadata:
+  name: nextjs-openshift-app
+  labels:
+    app: nextjs-openshift-app
+    app.kubernetes.io/part-of: nextjs-openshift-app
+spec:
+  ports:
+    - name: http
+      protocol: TCP
+      port: 3000
+      targetPort: 3000
+  selector:
+    app: nextjs-openshift-app
+---
+# ROUTE - Nur für Frontend öffentlich erreichbar
+kind: Route
+apiVersion: route.openshift.io/v1
+metadata:
+  name: nextjs-openshift-app
+  labels:
+    app: nextjs-openshift-app
+    app.kubernetes.io/part-of: nextjs-openshift-app
+spec:
+  to:
+    kind: Service
+    name: nextjs-openshift-app
+  port:
+    targetPort: http
+  tls:
+    termination: edge
+    insecureEdgeTerminationPolicy: Redirect
