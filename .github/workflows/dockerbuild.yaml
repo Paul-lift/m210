@@ -1,0 +1,38 @@
+name: Build and Push Docker Image
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch: {}
+
+jobs:
+  build-and-push:
+    runs-on: ubuntu-latest
+
+    permissions:
+      contents: read
+      packages: write
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Log in to GHCR
+        uses: docker/login-action@v3
+        with:
+          registry: ghcr.io
+          username: yannikackermann
+          password: ${{ secrets.GHCR_PAT }}
+
+
+      - name: Build and push Docker image
+        uses: docker/build-push-action@v6
+        with:
+          context: ./Openshift
+          file: ./Openshift/Dockerfile
+          push: true
+          tags: |
+            ghcr.io/yannikackermann/html-openshift-app:latest
+            ghcr.io/yannikackermann/html-openshift-app:${{ github.sha }}
+
+ 
