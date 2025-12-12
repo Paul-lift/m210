@@ -49,6 +49,5 @@ jobs:
           tags: |
             ghcr.io/paul-lift/nextjs-openshift-app:latest
             ghcr.io/paul-lift/nextjs-openshift-app:${{ github.sha }}
-            ghcr.io/${{ github.Paul-lift }}/nextjs-openshift-app:${{ github.sha }}
 
  
