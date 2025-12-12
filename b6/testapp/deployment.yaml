@@ -75,7 +75,7 @@ spec:
         imagePullPolicy: Always
         env:
         - name: NEXT_PUBLIC_API_URL
-          value: "http://nextjs-backend-app:3001/api"
+          value: "http://nextjs-backend-app:3001"
 ---
 # FRONTEND SERVICE
 kind: Service
