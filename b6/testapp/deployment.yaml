@@ -22,6 +22,7 @@ spec:
         ports:
         - containerPort: 3001
           protocol: TCP
+        # HIER WERDEN NAMEN DEFINIERT - muss mit dockerbuild.yaml übereinstimmen
         image: ghcr.io/paul-lift/nextjs-backend-app:latest
         imagePullPolicy: Always
         env:
@@ -71,6 +72,7 @@ spec:
         ports:
         - containerPort: 3000
           protocol: TCP
+        # HIER WERDEN NAMEN DEFINIERT - muss mit dockerbuild.yaml übereinstimmen
         image: ghcr.io/paul-lift/nextjs-openshift-app:latest
         imagePullPolicy: Always
         env:
