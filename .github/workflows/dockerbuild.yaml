@@ -1,4 +1,4 @@
-name: Build and Push Docker Image
+name: Build and Push Docker Images
 
 on:
   push:
@@ -21,18 +21,33 @@ jobs:
         uses: docker/login-action@v3
         with:
           registry: ghcr.io
-          username: yannikackermann
-          password: ${{ secrets.GHCR_PAT }}
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
 
-
-      - name: Build and push Docker image
+      # ============================================
+      # BACKEND IMAGE
+      # ============================================
+      - name: Build and push Backend image
         uses: docker/build-push-action@v6
         with:
-          context: ./Openshift
-          file: ./Openshift/Dockerfile
+          context: ./b6/testapp/backend
+          file: ./b6/testapp/backend/Dockerfile
           push: true
           tags: |
-            ghcr.io/yannikackermann/html-openshift-app:latest
-            ghcr.io/yannikackermann/html-openshift-app:${{ github.sha }}
+            ghcr.io/${{ github.Paul-lift }}/nextjs-backend-app:latest
+            ghcr.io/${{ github.Paul-lift }}/nextjs-backend-app:${{ github.sha }}
+
+      # ============================================
+      # FRONTEND IMAGE
+      # ============================================
+      - name: Build and push Frontend image
+        uses: docker/build-push-action@v6
+        with:
+          context: ./b6/testapp
+          file: ./b6/testapp/Dockerfile
+          push: true
+          tags: |
+            ghcr.io/${{ github.Paul-lift }}/nextjs-openshift-app:latest
+            ghcr.io/${{ github.Paul-lift }}/nextjs-openshift-app:${{ github.sha }}
 
  
