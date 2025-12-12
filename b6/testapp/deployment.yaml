@@ -1,4 +1,57 @@
+# ============================================
+# MONGODB DEPLOYMENT
+# ============================================
+kind: Deployment
+apiVersion: apps/v1
+metadata:
+  name: mongodb
+  labels:
+    app: mongodb
+    app.kubernetes.io/part-of: nextjs-openshift-app
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: mongodb
+  template:
+    metadata:
+      labels:
+        app: mongodb
+    spec:
+      containers:
+      - name: mongodb
+        image: mongo:7
+        ports:
+        - containerPort: 27017
+          protocol: TCP
+        resources: {}
+        volumeMounts:
+        - name: mongodb-data
+          mountPath: /data/db
+      volumes:
+      - name: mongodb-data
+        emptyDir: {}
+---
+# MONGODB SERVICE
+kind: Service
+apiVersion: v1
+metadata:
+  name: mongodb
+  labels:
+    app: mongodb
+    app.kubernetes.io/part-of: nextjs-openshift-app
+spec:
+  ports:
+    - name: mongodb
+      protocol: TCP
+      port: 27017
+      targetPort: 27017
+  selector:
+    app: mongodb
+---
+# ============================================
 # BACKEND DEPLOYMENT
+# ============================================
 kind: Deployment
 apiVersion: apps/v1
 metadata:

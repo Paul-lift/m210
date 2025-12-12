@@ -89,6 +89,7 @@ jobs:
 
       - name: Wait for Deployment
         run: |
+          oc rollout status deployment/mongodb -n 231234-paubot --timeout=5m
           oc rollout status deployment/nextjs-backend-app -n 231234-paubot --timeout=5m
           oc rollout status deployment/nextjs-openshift-app -n 231234-paubot --timeout=5m
 
