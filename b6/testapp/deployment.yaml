@@ -1,55 +1,4 @@
 # ============================================
-# MONGODB DEPLOYMENT
-# ============================================
-kind: Deployment
-apiVersion: apps/v1
-metadata:
-  name: mongodb
-  labels:
-    app: mongodb
-    app.kubernetes.io/part-of: nextjs-openshift-app
-spec:
-  replicas: 1
-  selector:
-    matchLabels:
-      app: mongodb
-  template:
-    metadata:
-      labels:
-        app: mongodb
-    spec:
-      containers:
-      - name: mongodb
-        image: mongo:7
-        ports:
-        - containerPort: 27017
-          protocol: TCP
-        resources: {}
-        volumeMounts:
-        - name: mongodb-data
-          mountPath: /data/db
-      volumes:
-      - name: mongodb-data
-        emptyDir: {}
----
-# MONGODB SERVICE
-kind: Service
-apiVersion: v1
-metadata:
-  name: mongodb
-  labels:
-    app: mongodb
-    app.kubernetes.io/part-of: nextjs-openshift-app
-spec:
-  ports:
-    - name: mongodb
-      protocol: TCP
-      port: 27017
-      targetPort: 27017
-  selector:
-    app: mongodb
----
-# ============================================
 # BACKEND DEPLOYMENT
 # ============================================
 kind: Deployment
@@ -76,11 +25,9 @@ spec:
         - containerPort: 3001
           protocol: TCP
         # HIER WERDEN NAMEN DEFINIERT - muss mit dockerbuild.yaml übereinstimmen
-        image: ghcr.io/paul-lift/nextjs-backend-app:latest
+        image: ghcr.io/paul-lift/m210/nextjs-backend-app:latest
         imagePullPolicy: Always
         env:
-        - name: MONGODB_URI
-          value: "mongodb://mongodb:27017/todos"
         - name: PORT
           value: "3001"
 ---
@@ -126,7 +73,7 @@ spec:
         - containerPort: 3000
           protocol: TCP
         # HIER WERDEN NAMEN DEFINIERT - muss mit dockerbuild.yaml übereinstimmen
-        image: ghcr.io/paul-lift/nextjs-openshift-app:latest
+        image: ghcr.io/paul-lift/m210/nextjs-openshift-app:latest
         imagePullPolicy: Always
         env:
         - name: NEXT_PUBLIC_API_URL

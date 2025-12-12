@@ -80,8 +80,8 @@ jobs:
         run: |
           export BACKEND_TAG=${{ github.sha }}
           export FRONTEND_TAG=${{ github.sha }}
-          sed -i "s|ghcr.io/paul-lift/nextjs-backend-app:latest|ghcr.io/paul-lift/nextjs-backend-app:${BACKEND_TAG}|g" deploymentEdited/deployment.yaml
-          sed -i "s|ghcr.io/paul-lift/nextjs-openshift-app:latest|ghcr.io/paul-lift/nextjs-openshift-app:${FRONTEND_TAG}|g" deploymentEdited/deployment.yaml
+          sed -i "s|ghcr.io/paul-lift/m210/nextjs-backend-app:latest|ghcr.io/paul-lift/m210/nextjs-backend-app:${BACKEND_TAG}|g" deploymentEdited/deployment.yaml
+          sed -i "s|ghcr.io/paul-lift/m210/nextjs-openshift-app:latest|ghcr.io/paul-lift/m210/nextjs-openshift-app:${FRONTEND_TAG}|g" deploymentEdited/deployment.yaml
 
       - name: Deploy to OpenShift
         run: |
@@ -89,7 +89,6 @@ jobs:
 
       - name: Wait for Deployment
         run: |
-          oc rollout status deployment/mongodb -n 231234-paubot --timeout=5m
           oc rollout status deployment/nextjs-backend-app -n 231234-paubot --timeout=5m
           oc rollout status deployment/nextjs-openshift-app -n 231234-paubot --timeout=5m
 
