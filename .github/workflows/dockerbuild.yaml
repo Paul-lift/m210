@@ -48,6 +48,8 @@ jobs:
           context: ./b6/testapp
           file: ./b6/testapp/Dockerfile
           push: true
+          build-args: |
+            NEXT_PUBLIC_API_URL=http://nextjs-backend-app:3001
           tags: |
             ghcr.io/paul-lift/m210/nextjs-openshift-app:latest
             ghcr.io/paul-lift/m210/nextjs-openshift-app:${{ github.sha }}
