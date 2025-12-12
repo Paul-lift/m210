@@ -34,8 +34,8 @@ jobs:
           file: ./b6/testapp/backend/Dockerfile
           push: true
           tags: |
-            ghcr.io/${{ github.Paul-lift }}/nextjs-backend-app:latest
-            ghcr.io/${{ github.Paul-lift }}/nextjs-backend-app:${{ github.sha }}
+            ghcr.io/paul-lift/nextjs-backend-app:latest
+            ghcr.io/paul-lift/nextjs-backend-app:${{ github.sha }}
 
       # ============================================
       # FRONTEND IMAGE
@@ -47,7 +47,8 @@ jobs:
           file: ./b6/testapp/Dockerfile
           push: true
           tags: |
-            ghcr.io/${{ github.Paul-lift }}/nextjs-openshift-app:latest
+            ghcr.io/paul-lift/nextjs-openshift-app:latest
+            ghcr.io/paul-lift/nextjs-openshift-app:${{ github.sha }}
             ghcr.io/${{ github.Paul-lift }}/nextjs-openshift-app:${{ github.sha }}
 
  
